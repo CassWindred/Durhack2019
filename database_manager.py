@@ -4,6 +4,11 @@ import sqlite3
 def create_tables():
     database = sqlite3.connect("database.db")
     c = database.cursor()
+    c.execute("""CREATE TABLE IF NOT EXISTS Users
+    (Username VARCHAR NOT NULL,
+    Password VARCHAR NOT NULL,
+    FirstName VARCHAR NOT NULL,
+    LastName VARCHAR NOT NULL)""")
     c.execute("""CREATE TABLE IF NOT EXISTS Accessibilities
     (Place_ID VARCHAR NOT NULL,
     Access_Type VARCHAR NOT NULL,
@@ -14,6 +19,12 @@ def create_tables():
     4_Star INTEGER NOT NULL,
     5_Star INTEGER NOT NULL
     PRIMARY KEY (Place_ID, Access_Type))""")
+    c.execute("""CREATE TABLE IF NOT EXISTS Comments
+    (Place_ID VARCHAR NOT NULL,
+    Access_Type VARCHAR NOT NULL,
+    User VARCHAR NOT NULL,
+    Comment VARCHAR NOT NULL,
+    PRIMARY KEY (Place_ID, Access_Type, User))""")
 
 #
 def check_username(username):
