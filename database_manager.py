@@ -1,14 +1,32 @@
 import sqlite3
 
+#creates tables: Users, Accessibilities, Comments
 def create_tables():
     database = sqlite3.connect("database.db")
     c = database.cursor()
     c.execute("""CREATE TABLE IF NOT EXISTS Users
-    (Username VARCHAR(20) PRIMARY KEY,
-    Password BINARY(32) NOT NULL,
-    FirstName VARCHAR(20) NOT NULL,
-    LastName VARCHAR(20) NOT NULL)""")
+    (Username VARCHAR NOT NULL,
+    Password VARCHAR NOT NULL,
+    FirstName VARCHAR NOT NULL,
+    LastName VARCHAR NOT NULL)""")
+    c.execute("""CREATE TABLE IF NOT EXISTS Accessibilities
+    (Place_ID VARCHAR NOT NULL,
+    Access_Type VARCHAR NOT NULL,
+    Star_0 INTEGER NOT NULL,
+    Star_1 INTEGER NOT NULL,
+    Star_2 INTEGER NOT NULL,
+    Star_3 INTEGER NOT NULL,
+    Star_4 INTEGER NOT NULL,
+    Star_5 INTEGER NOT NULL
+    PRIMARY KEY (Place_ID, Access_Type))""")
+    c.execute("""CREATE TABLE IF NOT EXISTS Comments
+    (Place_ID VARCHAR NOT NULL,
+    Access_Type VARCHAR NOT NULL,
+    User VARCHAR NOT NULL,
+    Comment VARCHAR NOT NULL,
+    PRIMARY KEY (Place_ID, Access_Type, User))""")
 
+#checks whether or not a username already exists in the Users table
 def check_username(username):
     database = sqlite3.connect("database.db")
     c = database.cursor()
@@ -19,7 +37,8 @@ def check_username(username):
             return False
         else:
             return True
-    
+
+#createsa new user in the Users table
 def new_user(username, password, first_name, last_name):
     database = sqlite3.connect("database.db")
     c = database.cursor()
@@ -27,8 +46,11 @@ def new_user(username, password, first_name, last_name):
     database.commit()
     database.close()
 
-def place_info(place_ID):
+#will call the place accessibility ratings
+def place_access(place_ID):
+    pass
 
-
-
+#will call the place's comments
+def place_comments(place_ID):
+    pass
 
