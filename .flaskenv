@@ -1,0 +1,2 @@
+FLASK_APP=Mapcess.py
+FLASK_DEBUG=1
