@@ -1,7 +1,5 @@
-alert("mainscript.js loaded!");
+
 console.log("WHAT  ");
-
-
 
 
 function initMap() {

@@ -12,3 +12,7 @@ def example():
 def hello_world():
     user = {'username': 'Miguel'}
     return render_template('mainpage.html', title='Home', user=user)
+
+@app.route('/getPlaceInfo/<placeId>')
+def getPlaceInfo(placeId):
+    pass
