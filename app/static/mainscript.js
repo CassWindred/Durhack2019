@@ -1,9 +1,8 @@
 alert("mainscript.js loaded!");
 console.log("WHAT  ");
-console.log(1);
 
 
-window.x = 1;
+
 
 function initMap() {
   // The location of Uluru
@@ -13,5 +12,18 @@ function initMap() {
       document.getElementById('map'), {zoom: 4, center: uluru});
   // The marker, positioned at Uluru
   var marker = new google.maps.Marker({position: uluru, map: map});
+
+    google.maps.event.addListener(map, 'click', function(event) {
+    onClick(event, map);
+  });
 }
-console.log(1);
+
+function onClick(event) {
+  if ("placeId" in event) {
+    let placeId = event.placeId;
+    console.log("A place was clicked! ID: "+placeId);
+  } else {
+    console.log("A click was detected, but, well, I dont think it was a place");
+  }
+
+}
