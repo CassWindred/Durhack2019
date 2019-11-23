@@ -12,12 +12,12 @@ def create_tables():
     c.execute("""CREATE TABLE IF NOT EXISTS Accessibilities
     (Place_ID VARCHAR NOT NULL,
     Access_Type VARCHAR NOT NULL,
-    0_Star INTEGER NOT NULL,
-    1_Star INTEGER NOT NULL,
-    2_Star INTEGER NOT NULL,
-    3_Star INTEGER NOT NULL,
-    4_Star INTEGER NOT NULL,
-    5_Star INTEGER NOT NULL
+    Star_0 INTEGER NOT NULL,
+    Star_1 INTEGER NOT NULL,
+    Star_2 INTEGER NOT NULL,
+    Star_3 INTEGER NOT NULL,
+    Star_4 INTEGER NOT NULL,
+    Star_5 INTEGER NOT NULL
     PRIMARY KEY (Place_ID, Access_Type))""")
     c.execute("""CREATE TABLE IF NOT EXISTS Comments
     (Place_ID VARCHAR NOT NULL,
@@ -26,7 +26,7 @@ def create_tables():
     Comment VARCHAR NOT NULL,
     PRIMARY KEY (Place_ID, Access_Type, User))""")
 
-#
+#checks whether or not a username already exists in the Users table
 def check_username(username):
     database = sqlite3.connect("database.db")
     c = database.cursor()
@@ -37,7 +37,8 @@ def check_username(username):
             return False
         else:
             return True
-    
+
+#createsa new user in the Users table
 def new_user(username, password, first_name, last_name):
     database = sqlite3.connect("database.db")
     c = database.cursor()
@@ -45,8 +46,11 @@ def new_user(username, password, first_name, last_name):
     database.commit()
     database.close()
 
-def place_info(place_ID):
+#will call the place accessibility ratings
+def place_access(place_ID):
+    pass
 
-
-
+#will call the place's comments
+def place_comments(place_ID):
+    pass
 
