@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
-import gmaps
 
 
 app = Flask(__name__)
