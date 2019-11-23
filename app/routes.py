@@ -10,6 +10,14 @@ def login():
             form.username.data))
         return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
+from flask import render_template
+
+import database_manager
+
+@app.route('/example')
+def example():
+    return "This is an example page!"
+
 
 @app.route('/')
 @app.route('/index')
@@ -17,6 +25,7 @@ def index():
     user = {'username': 'Katie'}
     return render_template('index.html', title='Map', user=user, map=True)
 
+
 @app.route('/getPlaceInfo/<placeId>')
 def getPlaceInfo(placeId):
-    pass
+    database_manager.place_access(placeId)
