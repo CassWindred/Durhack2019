@@ -1,4 +1,5 @@
 flask
 python-dotenv
 flask_bootstrap
-flask-googlemaps
+flask_googlemaps
+flask_wtf

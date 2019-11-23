@@ -1,0 +1,14 @@
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - Mapcess</title>
+      {% else %}
+      <title>Welcome to Mapcess</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>Mapcess: <a href="/index">Home</a></div>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>
