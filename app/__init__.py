@@ -2,8 +2,10 @@ from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_googlemaps import GoogleMaps as gmaps
 
-app = Flask(__name__)
+from config import Config
 
-bootstrap = Bootstrap(app)
-gmaps(app)
+app = Flask(__name__)
+app.config.from_object(Config)
+
 from app import routes
+bootstrap = Bootstrap(app)
