@@ -1,14 +1,21 @@
 import sqlite3
 
+#creates tables: Users, Accessibilities, Comments
 def create_tables():
     database = sqlite3.connect("database.db")
     c = database.cursor()
-    c.execute("""CREATE TABLE IF NOT EXISTS Users
-    (Username VARCHAR(20) PRIMARY KEY,
-    Password BINARY(32) NOT NULL,
-    FirstName VARCHAR(20) NOT NULL,
-    LastName VARCHAR(20) NOT NULL)""")
+    c.execute("""CREATE TABLE IF NOT EXISTS Accessibilities
+    (Place_ID VARCHAR NOT NULL,
+    Access_Type VARCHAR NOT NULL,
+    0_Star INTEGER NOT NULL,
+    1_Star INTEGER NOT NULL,
+    2_Star INTEGER NOT NULL,
+    3_Star INTEGER NOT NULL,
+    4_Star INTEGER NOT NULL,
+    5_Star INTEGER NOT NULL
+    PRIMARY KEY (Place_ID, Access_Type))""")
 
+#
 def check_username(username):
     database = sqlite3.connect("database.db")
     c = database.cursor()
