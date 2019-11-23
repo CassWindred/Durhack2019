@@ -11,25 +11,11 @@ def login():
         return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
 
+@app.route('/')
 @app.route('/index')
 def index():
     user = {'username': 'Katie'}
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html', title='Home', user=user, posts=posts)
-
-@app.route('/')
-def hello_world():
-    user = {'username': 'Katie'}
-    return render_template('mainpage.html', title='Home', user=user)
+    return render_template('index.html', title='Map', user=user, map=True)
 
 @app.route('/getPlaceInfo/<placeId>')
 def getPlaceInfo(placeId):
