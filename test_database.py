@@ -27,4 +27,8 @@ def new_user(username, password, first_name, last_name):
     database.commit()
     database.close()
 
+def place_info(place_ID):
+
+
+
 
