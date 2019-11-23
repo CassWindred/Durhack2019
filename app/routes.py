@@ -29,4 +29,8 @@ def index():
 @app.route('/')
 def hello_world():
     user = {'username': 'Katie'}
-    return render_template('index.html', user=user)
+    return render_template('mainpage.html', title='Home', user=user)
+
+@app.route('/getPlaceInfo/<placeId>')
+def getPlaceInfo(placeId):
+    pass
