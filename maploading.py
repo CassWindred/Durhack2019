@@ -1,0 +1,1 @@
+gmaps.configure(api_key='Your api key here')
