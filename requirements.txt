@@ -2,3 +2,4 @@ flask
 python-dotenv
 flask_bootstrap
 flask-googlemaps
+flask.ext
