@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
-from flaskext.googlemaps import GoogleMaps as gmaps
+from flask_googlemaps import GoogleMaps as gmaps
 
 app = Flask(__name__)
 
