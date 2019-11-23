@@ -54,3 +54,10 @@ def place_comments(place_ID):
     c = database.cursor()
     pass
 
+#adds a comment to the comments database
+def comment(place_ID, Accessibility, User, comment):
+    database = sqlite3.connect("database.db")
+    c = database.cursor()
+    c.execute("""INSERT INTO Comments VALUES (?, ?, ?, ?)""", (place_ID, Accessibility, User, comment))
+    database.commit()
+    database.close()
