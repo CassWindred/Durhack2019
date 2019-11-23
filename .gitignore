@@ -4,3 +4,10 @@
 app/__pycache__/
 
 venv/
+
+Durhack2019/
+app./
+
+.vscode/
+
+__pycache__/

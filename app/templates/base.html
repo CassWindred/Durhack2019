@@ -1,0 +1,34 @@
+{% extends 'bootstrap/base.html' %}
+
+{%- block html %}
+  <head>
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+    {% if title %}
+    <title>{{ title }} - Mapcess</title>
+    {% else %}
+    <title>Mapcess</title>
+    {% endif %}
+  </head>
+  <body>
+      <div>
+        <h1>Mapcess: 
+            {% if user %}
+            Hi, {{ user.username }}!
+            {% endif %}
+            <a href="{{ url_for('index') }}">Map</a>
+            <a href="{{ url_for('login') }}">Login</a>
+        </h1>
+      </div>
+      {% block app_content %}{% endblock %}
+  </body>
+  <script type="text/javascript" src="{{ url_for('static', filename='mainscript.js') }}"></script>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4ah-ctCeb67qUJbTDe0aW4PVg_MAh7Ho&callback=initMap">
+  </script>
+  {%- endblock html %}
