@@ -13,12 +13,7 @@ def create_tables():
     (LocationID VARCHAR NOT NULL,
     AccessType VARCHAR NOT NULL,
     User VARCHAR NOT NULL,
-    ZeroStar INTEGER,
-    OneStar INTEGER,
-    TwoStar INTEGER,
-    ThreeStar INTEGER,
-    FourStar INTEGER,
-    FiveStar INTEGER,
+    Rating INTEGER, 
     FOREIGN KEY (User) REFERENCES Users (Username),
     PRIMARY KEY (LocationID, AccessType, User))""")
     c.execute("""CREATE TABLE IF NOT EXISTS Comments
@@ -46,7 +41,7 @@ def new_location(LocationID, AccessType, User):
     c = database.cursor()
     c.execute("PRAGMA foreign_keys = ON")
     try:
-        c.execute("""INSERT INTO Accessibilities(LocationID, AccessType, User, ZeroStar, OneStar, TwoStar, ThreeStar, FourStar, FiveStar) VALUES (?, ?, ?, 0, 0, 0, 0, 0, 0)""", (LocationID, AccessType, User))
+        c.execute("""INSERT INTO Accessibilities(LocationID, AccessType, User) VALUES (?, ?, ?)""", (LocationID, AccessType, User))
     except:
         return False
     database.commit()
@@ -65,13 +60,10 @@ def new_comment(LocationID, AccessType, User, Comment):
     database.close()
 
 #updates rating 
-def add_rating(LocationID, AccessType, User, Star):
+def add_rating(LocationID, AccessType, User, star):
     database = sqlite3.connect("database.db")
     c = database.cursor()
-    c.execute("""SELECT {0} FROM Accessibilities WHERE LocationID = ? AND AccessType = ? AND User = ? """.format(Star), (LocationID, AccessType, User))
-    number = c.fetchall()
-    number = number[0][0] + 1
-    c.execute("""UPDATE Accessibilities SET {0} = ? WHERE LocationID = ? AND AccessType = ? AND User = ? """.format(Star), (number, LocationID, AccessType, User))
+    c.execute("""UPDATE Accessibilities SET Rating = ? WHERE LocationID = ? AND AccessType = ? AND User = ? """, (star, LocationID, AccessType, User))
     database.commit()
     database.close()
 
@@ -79,19 +71,16 @@ def add_rating(LocationID, AccessType, User, Star):
 def get_ratings(LocationID):
     database = sqlite3.connect("database.db")
     c = database.cursor()
-    c.execute("""SELECT AccessType, ZeroStar, OneStar, TwoStar, ThreeStar, FourStar, FiveStar FROM Accessibilities WHERE LocationID = ? """, (LocationID))
+    c.execute("""SELECT AccessType, Rating FROM Accessibilities WHERE LocationID = ? """, (LocationID))
     locations = c.fetchall()
-    print(locations)
     access_list = []
     for i in range(0, len(locations)):
-        access_list.append({"Access Type" : None, "Average Rating" : None, "Number of Ratings" : None})
+        access_list.append({"Access Type" : None, "Average Rating" : 0, "Number of Ratings" : 0})
         access_list[i]["Access Type"] = locations[i][0]
-        access_list[i]["Number of Ratings"] = locations[i][1] + locations[i][2] + locations[i][3] + locations[i][4] + locations[i][5] + locations[i][6]
-        if access_list[i]["Number of Ratings"] == 0:
-            access_list[i]["Average Rating"] = "Not yet rated"
-        else:
-            access_list[i]["Average Rating"] = round(((locations[i][2] * 1) + (locations[i][3] * 2) + (locations[i][4] * 3) + (locations[i][5] * 4) +
-                                                (locations[i][6] * 5)) / access_list[i]["Number of Ratings"], 1)
+        access_list[i]["Number of Ratings"] = len(locations)
+        if locations[i][1] != None:
+            access_list[i]["Average Rating"] += locations[i][1]
+    access_list[i]["Average Rating"] = access_list[i]["Average Rating"] / access_list[i]["Number of Ratings"]
     return access_list
 
 # will call the place's comments
@@ -117,3 +106,18 @@ def check_if_password_is_correct(Username, Password):
         return False
     else:
         return True
+
+create_tables()
+
+new_user('k2', '1234', 'meow', 'meow')
+
+new_location('1', 'Light level', 'k2')
+
+new_comment('1', 'Light level', 'k2', 'lol')
+
+add_rating('1', 'Light level', 'k2', 3)
+
+print(get_ratings('1'))
+
+print(get_comments('1'))
+
