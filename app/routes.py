@@ -74,12 +74,16 @@ def getPlaceInfo(placeId):
         logs.close()
     except:
         return redirect(url_for('login'))
-    new_location(placeId, "Light level", user)
     access_info = get_ratings(placeId)
+    comments = get_comments(placeId)
     infoBoxContent=""
     for info in access_info:
         infoBoxContent += f"{info['Access Type']}: Rated {info['Average Rating']} by {info['Number of Ratings']} users. \n"
-
+    if comments == []:
+        infoBoxContent += "No comments avaliable"
+    else:
+        for comment in comments:
+            infoBoxContent += f"{comment['Access Type']}:  {comment['Comment']}, \n"
     return infoBoxContent
 
 def getUser():
