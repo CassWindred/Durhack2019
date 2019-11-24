@@ -5,12 +5,10 @@ const url = window.location.host;
 
 function initMap() {
     // The location of Uluru
-    let uluru = {lat: -25.344, lng: 131.036};
+    let rundle = {lat: -34.922785, lng: 138.602589};
     // The map, centered at Uluru
     let map = new google.maps.Map(
-        document.getElementById('map'), {zoom: 4, center: uluru});
-    // The marker, positioned at Uluru
-    let marker = new google.maps.Marker({position: uluru, map: map});
+        document.getElementById('map'), {zoom: 14, center: rundle});
     let placeService = new google.maps.places.PlacesService(map);
 
     google.maps.event.addListener(map, 'click', function (event) {
