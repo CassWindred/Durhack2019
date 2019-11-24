@@ -6,17 +6,19 @@ from app.forms import LoginForm, SubmitInfoForm, SignUpForm
 
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
+    user = getUser()
     form = SubmitInfoForm('')
     if form.validate_on_submit():
         return redirect(url_for('index'))
-    return render_template('submit.html', title='Submit', form=form)
+    return render_template('submit.html', title='Submit', form=form, user=user)
 
 @app.route('/submit/<placeId>', methods=['GET', 'POST'])
 def submitPlace(placeId):
-    form = SubmitInfoForm(placeId)
+    user = getUser()
+    form = SubmitInfoForm()
     if form.validate_on_submit():
         return redirect(url_for('index'))
-    return render_template('submit.html', title='Submit', form=form)
+    return render_template('submit.html', title='Submit', form=form, user=user)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -48,12 +50,7 @@ def signUp():
 @app.route('/')
 @app.route('/index')
 def index():
-    try:
-        logs = open("logs.txt", "r")
-        user = logs.read()
-        logs.close()
-    except:
-        user = ""
+    user = getUser()
     return render_template('index.html', title='Map', user=user, map=True)
 
 @app.route('/getPlaceInfo/<placeId>') #dont break it if there's no data!
@@ -71,5 +68,14 @@ def getPlaceInfo(placeId):
         infoBoxContent += f"{info['Access Type']}: Rated {info['Average Rating']} by {info['Number of Ratings']} users. \n"
 
     return infoBoxContent
+
+def getUser():
+    try:
+        logs = open("logs.txt", "r")
+        user = logs.read()
+        logs.close()
+    except:
+        user = ""
+    return user
 
 
