@@ -90,7 +90,7 @@ def get_ratings(LocationID):
 def get_comments(LocationID):
     database = sqlite3.connect("database.db")
     c = database.cursor()
-    c.execute("""SELECT AccessType, User, Comment FROM Comments WHERE LocationID = ? """, (LocationID))
+    c.execute("""SELECT AccessType, User, Comment FROM Comments WHERE LocationID = ? """, (LocationID,))
     comments = c.fetchall()
     comments_list = []
     for i in range(0, len(comments)):
