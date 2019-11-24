@@ -7,17 +7,19 @@ from app.forms import LoginForm, SubmitInfoForm, SignUpForm
 
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
+    user = getUser()
     form = SubmitInfoForm('')
     if form.validate_on_submit():
         return redirect(url_for('index'))
-    return render_template('submit.html', title='Submit', form=form)
+    return render_template('submit.html', title='Submit', form=form, user=user)
 
 @app.route('/submit/<placeId>', methods=['GET', 'POST'])
 def submitPlace(placeId):
-    form = SubmitInfoForm(placeId)
+    user = getUser()
+    form = SubmitInfoForm()
     if form.validate_on_submit():
         return redirect(url_for('index'))
-    return render_template('submit.html', title='Submit', form=form)
+    return render_template('submit.html', title='Submit', form=form, user=user)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -49,12 +51,7 @@ def signUp():
 @app.route('/')
 @app.route('/index')
 def index():
-    try:
-        logs = open("logs.txt", "r")
-        user = logs.read()
-        logs.close()
-    except:
-        user = ""
+    user = getUser()
     return render_template('index.html', title='Map', user=user, map=True)
 
 @app.route('/getPlaceInfo/<placeId>')
@@ -69,5 +66,14 @@ def getPlaceInfo(placeId):
     access_info = get_ratings(placeId)
     infoBoxContent = "{0}: {1} ({2})".format(access_info["Access Type"], access_info["Average Rating"], access_info["Number of Ratings"])
     return infoBoxContent
+
+def getUser():
+    try:
+        logs = open("logs.txt", "r")
+        user = logs.read()
+        logs.close()
+    except:
+        user = ""
+    return user
 
 
