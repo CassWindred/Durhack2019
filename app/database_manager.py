@@ -95,18 +95,17 @@ def get_ratings(LocationID):
     return access_list
 
 # will call the place's comments
-def place_comments(place_ID):
+def get_comments(LocationID):
     database = sqlite3.connect("database.db")
     c = database.cursor()
-    c.execute("""SELECT AccessType, User, Comment FROM Comments WHERE LocationID = ? """, (place_ID))
+    c.execute("""SELECT AccessType, User, Comment FROM Comments WHERE LocationID = ? """, (LocationID))
     comments = c.fetchall()
     comments_list = []
-    if len(comments) > 0:
-        for i in range(0, len(comments)):
-            comments_list.append({"Access Type": None, "User": None, "Comment": None})
-            comments_list[i]["Access Type"] = comments[i][1]
-            comments_list[i]["Average Rating"] = comments[i][2]
-            comments_list[i]["User Ratings"] = comments[i][3]
+    for i in range(0, len(comments)):
+        comments_list.append({"Access Type": None, "User": None, "Comment": None})
+        comments_list[i]["Access Type"] = comments[i][0]
+        comments_list[i]["User"] = comments[i][1]
+        comments_list[i]["Comment"] = comments[i][2]
     return comments_list
 
 def check_if_password_is_correct(Username, Password):

@@ -59,7 +59,8 @@ function onClick(event, map, placeService) { //Triggers on a click event
                 '</div>' +
                 '<h1 id="firstHeading" class="firstHeading">' + place.name + '</h1>' +
                 '<div id="bodyContent">' +
-                '<p>'+ Http.responseText + '</p>' +
+                '<p>Place ID: '+placeId +'</p>' +
+                '<p>'+ Http.responseText + '</p></div>' +
                 '<a href="submit">Submit more info</a>' + '</div>' +
                 '</div>';
               infowindow.setContent(contentString)
