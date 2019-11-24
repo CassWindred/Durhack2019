@@ -83,7 +83,7 @@ def get_ratings(LocationID):
     locations = c.fetchall()
     print(locations)
     access_list = []
-   if len(locations) > 0:
+    if len(locations) > 0:
         access_list.append({"Access Type" : None, "Average Rating" : None, "Number of Ratings" : None})
         access_list[i]["Access Type"] = locations[i][0]
         access_list[i]["Number of Ratings"] = locations[i][1] + locations[i][2] + locations[i][3] + locations[i][4] + locations[i][5] + locations[i][6]
@@ -98,9 +98,9 @@ def place_comments(place_ID):
     c.execute("""SELECT AccessType, User, Comment FROM Comments WHERE LocationID = ? """, (placeID))
     comments = c.fetchall()
     comments_list = []
-   if len(comments)) > 0:
-        access_list.append({"Access Type": None, "User": None, "Comment": None})
-        access_list[i]["Access Type"] = comments[i][0]
-        access_list[i]["Average Rating"] = comments[i][1]
-        access_list[i]["User Ratings"] = comments[i][2]
+    if len(comments) > 0:
+        comments_list.append({"Access Type": None, "User": None, "Comment": None})
+        comments_list[i]["Access Type"] = comments[i][0]
+        comments_list[i]["Average Rating"] = comments[i][1]
+        comments_list[i]["User Ratings"] = comments[i][2]
     return comments_list
