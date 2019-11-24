@@ -1,9 +1,9 @@
 import json
 from app import app
-from database_manager import *
+from .database_manager import *
 from flask import render_template, flash, redirect, url_for
 from app.forms import LoginForm, SubmitInfoForm, SignUpForm
-import database_manager
+#import database_manager
 
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
@@ -42,9 +42,12 @@ def signUp():
 @app.route('/')
 @app.route('/index')
 def index():
-    logs = open("logs.txt", "r")
-    user = logs.read()
-    logs.close()
+    try:
+        logs = open("logs.txt", "r")
+        user = logs.read()
+        logs.close()
+    except:
+        user = ""
     return render_template('index.html', title='Map', user=user, map=True)
 
 @app.route('/getPlaceInfo/<placeId>')
