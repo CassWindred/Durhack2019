@@ -80,7 +80,10 @@ def get_ratings(LocationID):
         access_list[i]["Number of Ratings"] = len(locations)
         if locations[i][1] != None:
             access_list[i]["Average Rating"] += locations[i][1]
-    access_list[i]["Average Rating"] = access_list[i]["Average Rating"] / access_list[i]["Number of Ratings"]
+    try:
+        access_list[i]["Average Rating"] = access_list[i]["Average Rating"] / access_list[i]["Number of Ratings"]
+    except:
+        access_list.append({"Access Type" : None, "Average Rating" : "Not yet rated", "Number of Ratings" : 0})
     return access_list
 
 # will call the place's comments
