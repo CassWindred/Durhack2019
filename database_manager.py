@@ -12,12 +12,8 @@ def create_tables():
     c.execute("""CREATE TABLE IF NOT EXISTS Accessibilities
     (Place_ID VARCHAR NOT NULL,
     Access_Type VARCHAR NOT NULL,
-    Star_0 INTEGER NOT NULL,
-    Star_1 INTEGER NOT NULL,
-    Star_2 INTEGER NOT NULL,
-    Star_3 INTEGER NOT NULL,
-    Star_4 INTEGER NOT NULL,
-    Star_5 INTEGER NOT NULL
+    Average_Rating VARCHAR NOT NULL,
+    User_Ratings VARCHAR NOT NULL,
     PRIMARY KEY (Place_ID, Access_Type))""")
     c.execute("""CREATE TABLE IF NOT EXISTS Comments
     (Place_ID VARCHAR NOT NULL,
@@ -48,11 +44,20 @@ def new_user(username, password, first_name, last_name):
 
 #will call the place accessibility ratings
 def place_access(place_ID):
+    database = sqlite3.connect("database.db")
+    c = database.cursor()
     pass
 
 #will call the place's comments
 def place_comments(place_ID):
+    database = sqlite3.connect("database.db")
+    c = database.cursor()
     pass
 
-
-
+#adds a comment to the comments database
+def comment(place_ID, Accessibility, User, comment):
+    database = sqlite3.connect("database.db")
+    c = database.cursor()
+    c.execute("""INSERT INTO Comments VALUES (?, ?, ?, ?)""", (place_ID, Accessibility, User, comment))
+    database.commit()
+    database.close()
