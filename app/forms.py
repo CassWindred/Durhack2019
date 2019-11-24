@@ -18,7 +18,15 @@ class SignUpForm(FlaskForm):
     submit = SubmitField('Sign up!')
 
 class SubmitInfoForm(FlaskForm):
-    location = StringField('ID', default="ID from javascript plz", validators=[DataRequired()])
-
-
-    submit = SubmitField('Submit')
+    def __init__(self, placeId, *args, **kwargs):
+        field = StringField('ID', default=placeId, validators=[DataRequired()])
+        name = 'location'
+        setattr(self, name, field)
+        self._unbound_fields = self._unbound_fields + [[name, field]]
+        field = SubmitField('Submit')
+        name = 'submit'
+        setattr(self, name, field)
+        self._unbound_fields = self._unbound_fields + [[name, field]]
+        super(SubmitInfoForm, self).__init__(placeId, *args, **kwargs)
+    
+    

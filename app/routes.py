@@ -1,13 +1,19 @@
-import json
 from app import app
-from app.database_manager import *
+from database_manager import *
 from flask import render_template, flash, redirect, url_for
 from app.forms import LoginForm, SubmitInfoForm, SignUpForm
 #import database_manager
 
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
-    form = SubmitInfoForm()
+    form = SubmitInfoForm('')
+    if form.validate_on_submit():
+        return redirect(url_for('index'))
+    return render_template('submit.html', title='Submit', form=form)
+
+@app.route('/submit/<placeId>', methods=['GET', 'POST'])
+def submitPlace(placeId):
+    form = SubmitInfoForm(placeId)
     if form.validate_on_submit():
         return redirect(url_for('index'))
     return render_template('submit.html', title='Submit', form=form)
@@ -52,14 +58,18 @@ def index():
 
 @app.route('/getPlaceInfo/<placeId>') #dont break it if there's no data!
 def getPlaceInfo(placeId):
-    data = database_manager.get_ratings(placeId)
-    infoBoxContent = ""
-    if data:
-        for atype in data:
-            infoBoxContent += f"{atype['Access Type']}: {atype['Average Rating']} based on {atype['Number of Ratings']} user reports."
+    try:
+        logs = open("logs.txt", "r")
+        user = logs.read()
+        logs.close()
+    except:
+        return redirect(url_for('login'))
+    new_location(placeId, "Light level", user)
+    access_info = get_ratings(placeId)
+    infoBoxContent=""
+    for info in access_info:
+        infoBoxContent += f"{info['Access Type']}: Rated {info['Average Rating']} by {info['Number of Ratings']} users. \n"
 
-    print(infoBoxContent)
-    #infoBoxContent = "This is placeholder text, this will appear in the box"
     return infoBoxContent
 
 
