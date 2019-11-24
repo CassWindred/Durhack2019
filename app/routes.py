@@ -7,7 +7,14 @@ from app.forms import LoginForm, SubmitInfoForm, SignUpForm
 
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
-    form = SubmitInfoForm()
+    form = SubmitInfoForm('')
+    if form.validate_on_submit():
+        return redirect(url_for('index'))
+    return render_template('submit.html', title='Submit', form=form)
+
+@app.route('/submit/<placeId>', methods=['GET', 'POST'])
+def submitPlace(placeId):
+    form = SubmitInfoForm(placeId)
     if form.validate_on_submit():
         return redirect(url_for('index'))
     return render_template('submit.html', title='Submit', form=form)
