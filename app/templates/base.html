@@ -19,7 +19,7 @@
       <div>
         <h1>Mapcess: 
             {% if user %}
-            Hi, {{ user.username }}!
+            Hi, {{ user }}!
             {% endif %}
             <a href="{{ url_for('index') }}">Map</a>
             <a href="{{ url_for('login') }}">Login</a>
