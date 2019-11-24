@@ -71,7 +71,7 @@ def add_rating(LocationID, AccessType, User, star):
 def get_ratings(LocationID):
     database = sqlite3.connect("database.db")
     c = database.cursor()
-    c.execute("""SELECT AccessType, Rating FROM Accessibilities WHERE LocationID = ? """, (LocationID))
+    c.execute("""SELECT AccessType, Rating FROM Accessibilities WHERE LocationID = ? """, (LocationID,))
     locations = c.fetchall()
     access_list = []
     for i in range(0, len(locations)):
@@ -80,7 +80,10 @@ def get_ratings(LocationID):
         access_list[i]["Number of Ratings"] = len(locations)
         if locations[i][1] != None:
             access_list[i]["Average Rating"] += locations[i][1]
-    access_list[i]["Average Rating"] = access_list[i]["Average Rating"] / access_list[i]["Number of Ratings"]
+    try:
+        access_list[i]["Average Rating"] = access_list[i]["Average Rating"] / access_list[i]["Number of Ratings"]
+    except:
+        access_list.append({"Access Type" : None, "Average Rating" : "Not yet rated", "Number of Ratings" : 0})
     return access_list
 
 # will call the place's comments
