@@ -52,9 +52,15 @@ def index():
 
 @app.route('/getPlaceInfo/<placeId>')
 def getPlaceInfo(placeId):
-    #database_manager.place_access(placeId)
-
-    infoBoxContent = "This is placeholder text, this will appear in the box"
+    try:
+        logs = open("logs.txt", "r")
+        user = logs.read()
+        logs.close()
+    except:
+        return redirect(url_for('login'))
+    new_location(placeId, "Light level", user)
+    access_info = get_ratings(placeId)
+    infoBoxContent = "{0}: {1} ({2})".format(access_info["Access Type"], access_info["Average Rating"], access_info["Number of Ratings"]
     return infoBoxContent
 
 
