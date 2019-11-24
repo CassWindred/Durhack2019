@@ -106,18 +106,3 @@ def check_if_password_is_correct(Username, Password):
         return False
     else:
         return True
-
-create_tables()
-
-new_user('k2', '1234', 'meow', 'meow')
-
-new_location('1', 'Light level', 'k2')
-
-new_comment('1', 'Light level', 'k2', 'lol')
-
-add_rating('1', 'Light level', 'k2', 3)
-
-print(get_ratings('1'))
-
-print(get_comments('1'))
-
