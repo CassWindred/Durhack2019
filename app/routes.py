@@ -34,11 +34,16 @@ def index():
     user = {'username': 'Katie'}
     return render_template('index.html', title='Map', user=user, map=True)
 
-@app.route('/getPlaceInfo/<placeId>')
+@app.route('/getPlaceInfo/<placeId>') #dont break it if there's no data!
 def getPlaceInfo(placeId):
-    #database_manager.place_access(placeId)
+    data = database_manager.get_ratings(placeId)
+    infoBoxContent = ""
+    if data:
+        for atype in data:
+            infoBoxContent += f"{atype['Access Type']}: {atype['Average Rating']} based on {atype['Number of Ratings']} user reports."
 
-    infoBoxContent = "This is placeholder text, this will appear in the box"
+    print(infoBoxContent)
+    #infoBoxContent = "This is placeholder text, this will appear in the box"
     return infoBoxContent
 
 
