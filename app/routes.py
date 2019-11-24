@@ -66,7 +66,10 @@ def getPlaceInfo(placeId):
         return redirect(url_for('login'))
     new_location(placeId, "Light level", user)
     access_info = get_ratings(placeId)
-    infoBoxContent = "{0}: {1} ({2})".format(access_info["Access Type"], access_info["Average Rating"], access_info["Number of Ratings"])
+    infoBoxContent=""
+    for info in access_info:
+        infoBoxContent += f"{info['Access Type']}: Rated {info['Average Rating']} by {info['Number of Ratings']} users. \n"
+
     return infoBoxContent
 
 
