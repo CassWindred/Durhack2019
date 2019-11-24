@@ -70,8 +70,7 @@ def add_rating(LocationID, AccessType, User, Star):
     c = database.cursor()
     c.execute("""SELECT {0} FROM Accessibilities WHERE LocationID = ? AND AccessType = ? AND User = ? """.format(Star), (LocationID, AccessType, User))
     number = c.fetchall()
-
-    number = number[Star] + 1
+    number = number[0][0] + 1
     c.execute("""UPDATE Accessibilities SET {0} = ? WHERE LocationID = ? AND AccessType = ? AND User = ? """.format(Star), (number, LocationID, AccessType, User))
     database.commit()
     database.close()
@@ -84,11 +83,13 @@ def get_ratings(LocationID):
     locations = c.fetchall()
     print(locations)
     access_list = []
-    if len(locations) > 0:
-        for i in range(0, len(locations)):
-            access_list.append({"Access Type" : None, "Average Rating" : None, "Number of Ratings" : None})
-            access_list[i]["Access Type"] = locations[i][0]
-            access_list[i]["Number of Ratings"] = locations[i][1] + locations[i][2] + locations[i][3] + locations[i][4] + locations[i][5] + locations[i][6]
+    for i in range(0, len(locations)):
+        access_list.append({"Access Type" : None, "Average Rating" : None, "Number of Ratings" : None})
+        access_list[i]["Access Type"] = locations[i][0]
+        access_list[i]["Number of Ratings"] = locations[i][1] + locations[i][2] + locations[i][3] + locations[i][4] + locations[i][5] + locations[i][6]
+        if access_list[i]["Number of Ratings"] == 0:
+            access_list[i]["Average Rating"] = "Not yet rated"
+        else:
             access_list[i]["Average Rating"] = round(((locations[i][2] * 1) + (locations[i][3] * 2) + (locations[i][4] * 3) + (locations[i][5] * 4) +
                                                 (locations[i][6] * 5)) / access_list[i]["Number of Ratings"], 1)
     return access_list
@@ -107,3 +108,13 @@ def place_comments(place_ID):
             comments_list[i]["Average Rating"] = comments[i][2]
             comments_list[i]["User Ratings"] = comments[i][3]
     return comments_list
+
+def check_if_password_is_correct(Username, Password):
+    database = sqlite3.connect("database.db")
+    c = database.cursor()
+    c.execute("""SELECT * FROM Users WHERE Username = ? AND Password = ? """, (Username, Password))
+    login = c.fetchall()
+    if login == []:
+        return False
+    else:
+        return True
