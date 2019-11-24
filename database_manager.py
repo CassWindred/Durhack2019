@@ -70,7 +70,8 @@ def add_rating(LocationID, AccessType, User, Star):
     c = database.cursor()
     c.execute("""SELECT {0} FROM Accessibilities WHERE LocationID = ? AND AccessType = ? AND User = ? """.format(Star), (LocationID, AccessType, User))
     number = c.fetchall()
-    number = number[0][0] + 1
+
+    number = number[Star] + 1
     c.execute("""UPDATE Accessibilities SET {0} = ? WHERE LocationID = ? AND AccessType = ? AND User = ? """.format(Star), (number, LocationID, AccessType, User))
     database.commit()
     database.close()
@@ -83,27 +84,26 @@ def get_ratings(LocationID):
     locations = c.fetchall()
     print(locations)
     access_list = []
-    for i in range(0, len(locations)):
-        access_list.append({"Access Type" : None, "Average Rating" : None, "Number of Ratings" : None})
-        access_list[i]["Access Type"] = locations[i][0]
-        access_list[i]["Number of Ratings"] = locations[i][1] + locations[i][2] + locations[i][3] + locations[i][4] + locations[i][5] + locations[i][6]
-        if access_list[i]["Number of Ratings"] == 0:
-            access_list[i]["Average Rating"] = "Not yet rated"
-        else:
+    if len(locations) > 0:
+        for i in range(0, len(locations)):
+            access_list.append({"Access Type" : None, "Average Rating" : None, "Number of Ratings" : None})
+            access_list[i]["Access Type"] = locations[i][0]
+            access_list[i]["Number of Ratings"] = locations[i][1] + locations[i][2] + locations[i][3] + locations[i][4] + locations[i][5] + locations[i][6]
             access_list[i]["Average Rating"] = round(((locations[i][2] * 1) + (locations[i][3] * 2) + (locations[i][4] * 3) + (locations[i][5] * 4) +
                                                 (locations[i][6] * 5)) / access_list[i]["Number of Ratings"], 1)
     return access_list
 
-#will call the place's comments
+# will call the place's comments
 def place_comments(place_ID):
     database = sqlite3.connect("database.db")
     c = database.cursor()
-    c.execute("""SELECT AccessType, User, Comment FROM Comments WHERE LocationID = ? """, (placeID))
+    c.execute("""SELECT AccessType, User, Comment FROM Comments WHERE LocationID = ? """, (place_ID))
     comments = c.fetchall()
     comments_list = []
-    for i in range(0, len(comments)):
-        access_list.append({"Access Type": None, "User": None, "Comment": None})
-        access_list[i]["Access Type"] = comments[i][1]
-        access_list[i]["Average Rating"] = comments[i][2]
-        access_list[i]["User Ratings"] = comments[i][3]
+    if len(comments) > 0:
+        for i in range(0, len(comments)):
+            comments_list.append({"Access Type": None, "User": None, "Comment": None})
+            comments_list[i]["Access Type"] = comments[i][1]
+            comments_list[i]["Average Rating"] = comments[i][2]
+            comments_list[i]["User Ratings"] = comments[i][3]
     return comments_list
