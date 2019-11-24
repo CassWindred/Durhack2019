@@ -51,15 +51,24 @@ def place_access(place_ID):
     access_list = []
     for i in range(0, len(locations)):
         access_list.append({"Access Type" : None, "Average Rating" : None, "User Ratings" : None})
-        access_list[i]["Access Type"] = locations[i][0]
-        access_list[i]["Average Rating"] = locations[i][1]
-        access_list[i]["User Ratings"] = locations[i][2]
+        access_list[i]["Access Type"] = locations[i][1]
+        access_list[i]["Average Rating"] = locations[i][2]
+        access_list[i]["User Ratings"] = locations[i][3]
+    return access_list
 
 #will call the place's comments
 def place_comments(place_ID):
     database = sqlite3.connect("database.db")
     c = database.cursor()
-    pass
+    c.execute("""SELECT AccessType, User, Comment FROM Comments WHERE PlaceID = ? """, (placeID))
+    comments = c.fetchall()
+    comments_list = []
+    for i in range(0, len(comments)):
+        access_list.append({"Access Type": None, "User": None, "Comment": None})
+        access_list[i]["Access Type"] = comments[i][1]
+        access_list[i]["Average Rating"] = comments[i][2]
+        access_list[i]["User Ratings"] = comments[i][3]
+    return comments_list
 
 #adds a comment to the comments database
 def add_comment(place_ID, Accessibility, User, comment):
