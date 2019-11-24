@@ -5,59 +5,105 @@ def create_tables():
     database = sqlite3.connect("database.db")
     c = database.cursor()
     c.execute("""CREATE TABLE IF NOT EXISTS Users
-    (Username VARCHAR NOT NULL,
+    (Username VARCHAR PRIMARY KEY,
     Password VARCHAR NOT NULL,
     FirstName VARCHAR NOT NULL,
     LastName VARCHAR NOT NULL)""")
     c.execute("""CREATE TABLE IF NOT EXISTS Accessibilities
-    (Place_ID VARCHAR NOT NULL,
-    Access_Type VARCHAR NOT NULL,
-    Average_Rating VARCHAR NOT NULL,
-    User_Ratings VARCHAR NOT NULL,
-    PRIMARY KEY (Place_ID, Access_Type))""")
-    c.execute("""CREATE TABLE IF NOT EXISTS Comments
-    (Place_ID VARCHAR NOT NULL,
-    Access_Type VARCHAR NOT NULL,
+    (LocationID VARCHAR NOT NULL,
+    AccessType VARCHAR NOT NULL,
     User VARCHAR NOT NULL,
-    Comment VARCHAR NOT NULL,
-    PRIMARY KEY (Place_ID, Access_Type, User))""")
+    ZeroStar INTEGER,
+    OneStar INTEGER,
+    TwoStar INTEGER,
+    ThreeStar INTEGER,
+    FourStar INTEGER,
+    FiveStar INTEGER,
+    FOREIGN KEY (User) REFERENCES Users (Username),
+    PRIMARY KEY (LocationID, AccessType, User))""")
+    c.execute("""CREATE TABLE IF NOT EXISTS Comments
+    (LocationID VARCHAR NOT NULL,
+    AccessType VARCHAR NOT NULL,
+    User VARCHAR NOT NULL,
+    Comment VARCHAR,
+    FOREIGN KEY (LocationID, AccessType, User) REFERENCES Accessibilities (LocationID, AccessType, User),
+    PRIMARY KEY (LocationID, AccessType, User))""")
 
-#checks whether or not a username already exists in the Users table
-def check_username(username):
+#creates a new user in the Users table
+def new_user(Username, Password, FirstName, LastName):
     database = sqlite3.connect("database.db")
     c = database.cursor()
-    while True:
-        c.execute("""SELECT Username FROM Users WHERE Username = ? """, (username,))
-        existing_users = c.fetchall()
-        if existing_users == []:
-            return False
-        else:
-            return True
-
-#createsa new user in the Users table
-def new_user(username, password, first_name, last_name):
-    database = sqlite3.connect("database.db")
-    c = database.cursor()
-    c.execute("""INSERT INTO Users VALUES (?, ?, ?, ?)""", (username, password, first_name, last_name))
+    try:
+        c.execute("""INSERT INTO Users VALUES (?, ?, ?, ?)""", (Username, Password, FirstName, LastName))
+    except:
+        return False
     database.commit()
     database.close()
 
-#will call the place accessibility ratings
-def place_access(place_ID):
+#creates a new location in the Accessibilities table
+def new_location(LocationID, AccessType, User):
     database = sqlite3.connect("database.db")
     c = database.cursor()
-    pass
+    c.execute("PRAGMA foreign_keys = ON")
+    try:
+        c.execute("""INSERT INTO Accessibilities(LocationID, AccessType, User, ZeroStar, OneStar, TwoStar, ThreeStar, FourStar, FiveStar) VALUES (?, ?, ?, 0, 0, 0, 0, 0, 0)""", (LocationID, AccessType, User))
+    except:
+        return False
+    database.commit()
+    database.close()
+
+#creates a new comment in the Comments table
+def new_comment(LocationID, AccessType, User, Comment):
+    database = sqlite3.connect("database.db")
+    c = database.cursor()
+    c.execute("PRAGMA foreign_keys = ON")
+    try:
+        c.execute("""INSERT INTO Comments(LocationID, AccessType, User, Comment) VALUES (?, ?, ?, ?)""", (LocationID, AccessType, User, Comment))
+    except:
+        return False
+    database.commit()
+    database.close()
+
+#updates rating 
+def add_rating(LocationID, AccessType, User, Star):
+    database = sqlite3.connect("database.db")
+    c = database.cursor()
+    c.execute("""SELECT {0} FROM Accessibilities WHERE LocationID = ? AND AccessType = ? AND User = ? """.format(Star), (LocationID, AccessType, User))
+    number = c.fetchall()
+    number = number[0][0] + 1
+    c.execute("""UPDATE Accessibilities SET {0} = ? WHERE LocationID = ? AND AccessType = ? AND User = ? """.format(Star), (number, LocationID, AccessType, User))
+    database.commit()
+    database.close()
+
+#gets rating for a location
+def get_ratings(LocationID):
+    database = sqlite3.connect("database.db")
+    c = database.cursor()
+    c.execute("""SELECT AccessType, ZeroStar, OneStar, TwoStar, ThreeStar, FourStar, FiveStar FROM Accessibilities WHERE LocationID = ? """, (LocationID))
+    locations = c.fetchall()
+    print(locations)
+    access_list = []
+    for i in range(0, len(locations)):
+        access_list.append({"Access Type" : None, "Average Rating" : None, "Number of Ratings" : None})
+        access_list[i]["Access Type"] = locations[i][0]
+        access_list[i]["Number of Ratings"] = locations[i][1] + locations[i][2] + locations[i][3] + locations[i][4] + locations[i][5] + locations[i][6]
+        if access_list[i]["Number of Ratings"] == 0:
+            access_list[i]["Average Rating"] = 0
+        else:
+            access_list[i]["Average Rating"] = round(((locations[i][2] * 1) + (locations[i][3] * 2) + (locations[i][4] * 3) + (locations[i][5] * 4) +
+                                                (locations[i][6] * 5)) / access_list[i]["Number of Ratings"], 1)
+    return access_list
 
 #will call the place's comments
 def place_comments(place_ID):
     database = sqlite3.connect("database.db")
     c = database.cursor()
-    pass
-
-#adds a comment to the comments database
-def comment(place_ID, Accessibility, User, comment):
-    database = sqlite3.connect("database.db")
-    c = database.cursor()
-    c.execute("""INSERT INTO Comments VALUES (?, ?, ?, ?)""", (place_ID, Accessibility, User, comment))
-    database.commit()
-    database.close()
+    c.execute("""SELECT AccessType, User, Comment FROM Comments WHERE LocationID = ? """, (placeID))
+    comments = c.fetchall()
+    comments_list = []
+    for i in range(0, len(comments)):
+        access_list.append({"Access Type": None, "User": None, "Comment": None})
+        access_list[i]["Access Type"] = comments[i][1]
+        access_list[i]["Average Rating"] = comments[i][2]
+        access_list[i]["User Ratings"] = comments[i][3]
+    return comments_list
