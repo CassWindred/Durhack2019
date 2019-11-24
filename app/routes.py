@@ -7,9 +7,22 @@ from app.forms import LoginForm, SubmitInfoForm, SignUpForm
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
     user = getUser()
-    form = SubmitInfoForm('')
+    form = SubmitInfoForm()
     if form.validate_on_submit():
-        return redirect(url_for('index'))
+        flash('submit request {}'.format(
+            form.ID.data))
+        if new_location(form.location.data, form.accessCategory.data, user) != False:
+            return redirect(url_for('index'))
+        else:
+            return redirect(url_for('submit'))
+        if add_rating(form.location.data, form.accessCategory.data, user, form.rating.data) != False:
+                return redirect(url_for('index'))
+        else:
+            return redirect(url_for('submit'))
+        if new_comment(form.location.data, form.accessCategory.data, user, form.comments.data) != False:
+                return redirect(url_for('index'))
+        else:
+            return redirect(url_for('submit'))
     return render_template('submit.html', title='Submit', form=form, user=user)
 
 @app.route('/submit/<placeId>', methods=['GET', 'POST'])
