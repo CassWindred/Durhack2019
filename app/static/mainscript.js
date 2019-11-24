@@ -12,7 +12,7 @@ function initMap() {
   let marker = new google.maps.Marker({position: uluru, map: map});
   let placeService = new google.maps.places.PlacesService(map);
 
-    google.maps.event.addListener(map, 'click', function(event) {
+  google.maps.event.addListener(map, 'click', function(event) {
     onClick(event, map, placeService);
     event.stop() //Prevents the event from propogating to that the standard popup does not appear
   });
@@ -26,28 +26,25 @@ function onClick(event, map, placeService) { //Triggers on a click event
     let placeId = event.placeId;
     console.log("A place was clicked! ID: "+placeId);
     let request = {
-  placeId: placeId,
-  fields: ['name', 'rating', 'formatted_phone_number', 'geometry']
-};
+      placeId: placeId,
+      fields: ['name', 'geometry']
+    };
 
-placeService.getDetails(request, callback);
-
-
-
+    placeService.getDetails(request, function(place, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        var contentString = '<div id="content">' +
+            '<div id="siteNotice">' +
+            '</div>' +
+            '<h1 id="firstHeading" class="firstHeading">' + place.name + '</h1>' +
+            '<div id="bodyContent">' +
+            '<p>TESTCONTENT</p>' + '</div>' +
+            '</div>';
+        var infowindow = new google.maps.InfoWindow({content: contentString, position: place.geometry.location});
+        infowindow.open(map);
+      }
+    })
   } else {
     console.log("A click was detected, but, well, I dont think it was a place");
   }
 }
 
-function callback(place, status) {
-  if (status === google.maps.places.PlacesServiceStatus.OK) {
-      var contentString = '<div id="content">'+
-      '<div id="siteNotice">'+
-      '</div>'+
-      '<h1 id="firstHeading" class="firstHeading">' + place.name + '</h1>'+
-      '<div id="bodyContent">'+
-      '<p>TESTCONTENT</p>'+'</div>'+
-      '</div>';
-    alert("You clicked on "+place.name+"!");
-  }
-}
