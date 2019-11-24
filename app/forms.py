@@ -16,6 +16,6 @@ class SignUpForm(FlaskForm):
     submit = SubmitField('Sign up!')
 
 class SubmitInfoForm(FlaskForm):
-    location = StringField('Where did you go?', validators=[DataRequired()])
+    location = StringField('Please Insert Place ID', validators=[DataRequired()])
 
     submit = SubmitField('Submit')
