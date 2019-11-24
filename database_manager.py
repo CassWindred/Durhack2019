@@ -71,7 +71,7 @@ def add_rating(LocationID, AccessType, User, star):
 def get_ratings(LocationID):
     database = sqlite3.connect("database.db")
     c = database.cursor()
-    c.execute("""SELECT AccessType, Rating FROM Accessibilities WHERE LocationID = ? """, (LocationID))
+    c.execute("""SELECT AccessType, Rating FROM Accessibilities WHERE LocationID = ? """, (LocationID,))
     locations = c.fetchall()
     access_list = []
     for i in range(0, len(locations)):

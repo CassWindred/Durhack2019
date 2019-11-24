@@ -1,6 +1,5 @@
-import json
 from app import app
-from app.database_manager import *
+from database_manager import *
 from flask import render_template, flash, redirect, url_for
 from app.forms import LoginForm, SubmitInfoForm, SignUpForm
 #import database_manager
