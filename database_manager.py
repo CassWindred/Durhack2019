@@ -46,7 +46,14 @@ def new_user(username, password, first_name, last_name):
 def place_access(place_ID):
     database = sqlite3.connect("database.db")
     c = database.cursor()
-    pass
+    c.execute("""SELECT AccessType, Average_Rating, User_Ratings FROM Accessibilities WHERE PlaceID = ? """, (placeID))
+    locations = c.fetchall()
+    access_list = []
+    for i in range(0, len(locations)):
+        access_list.append({"Access Type" : None, "Average Rating" : None, "User Ratings" : None})
+        access_list[i]["Access Type"] = locations[i][0]
+        access_list[i]["Average Rating"] = locations[i][1]
+        access_list[i]["User Ratings"] = locations[i][2]
 
 #will call the place's comments
 def place_comments(place_ID):
