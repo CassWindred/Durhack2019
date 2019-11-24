@@ -42,7 +42,7 @@ def new_user(username, password, first_name, last_name):
     database.commit()
     database.close()
 
-#will call the place accessibility ratings
+#will call the place accessibility ratings: access type = access
 def place_access(place_ID):
     database = sqlite3.connect("database.db")
     c = database.cursor()
@@ -62,7 +62,7 @@ def place_comments(place_ID):
     pass
 
 #adds a comment to the comments database
-def comment(place_ID, Accessibility, User, comment):
+def add_comment(place_ID, Accessibility, User, comment):
     database = sqlite3.connect("database.db")
     c = database.cursor()
     c.execute("""INSERT INTO Comments VALUES (?, ?, ?, ?)""", (place_ID, Accessibility, User, comment))

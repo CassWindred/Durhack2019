@@ -37,3 +37,5 @@ def index():
 @app.route('/getPlaceInfo/<placeId>')
 def getPlaceInfo(placeId):
     database_manager.place_access(placeId)
+
+
